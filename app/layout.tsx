@@ -3,8 +3,8 @@ import { ReactNode } from 'react';
 import ClientShell from '../components/ClientShell';
 
 export const metadata = {
-  title: 'ENGELAB — Engenharia com IA',
-  description: 'Biblioteca técnica de projetos, prompts e checklists para engenharia com IA.',
+  title: 'ENGELAB — Biblioteca de Engenharia Civil com IA',
+  description: '50 projetos-modelo, prompts técnicos, checklists e agentes IA para estudo e produção conceitual em engenharia civil.',
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
