@@ -40,6 +40,8 @@ baseada em dados mockados e com persistência local (via `localStorage`).
 - **docs/** – Documentação do esquema de banco de dados (`database-schema.md`).
 - **supabase/** – Esquema SQL (`schema.sql`) para futura integração com Supabase.
 
+https://engelab.pages.dev/
+
 ## Próximos passos
 
 - **Integrar Supabase:** utilizar o esquema SQL presente em `supabase/schema.sql` para criar as tabelas no Supabase e conectar o frontend usando as APIs de banco de dados e autenticação.
