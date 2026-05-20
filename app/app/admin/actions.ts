@@ -14,7 +14,7 @@ function nullableString(formData: FormData, key: string) {
 }
 
 async function requireAdmin() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
     error,
