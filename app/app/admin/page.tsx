@@ -10,6 +10,7 @@ import {
 } from './actions';
 
 export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
 
 type Plan = {
   id: number;

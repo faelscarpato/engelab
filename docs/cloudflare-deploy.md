@@ -1,6 +1,4 @@
-# Deploy na Cloudflare
-
-Este projeto usa Next.js com SSR, middleware, cookies, Server Actions e Supabase Admin API. Por isso o deploy correto na Cloudflare é com o adapter OpenNext no runtime de Workers. Um deploy estático do Cloudflare Pages não suporta a área `/app/admin` nem o login real.
+# Deploy na Cloudflare Pages
 
 ## Comandos locais
 
@@ -24,14 +22,9 @@ $env:XDG_CONFIG_HOME = (Join-Path (Get-Location).Path '.wrangler-config')
 npm run deploy:cf
 ```
 
-O script usa `--keep-vars` para não apagar variáveis/secrets configuradas no dashboard da Cloudflare.
-
 ## Variáveis obrigatórias
 
-Configure as mesmas variáveis em:
-
-- Cloudflare Workers/Builds: Build variables and secrets
-- Cloudflare Worker: Variables and Secrets de runtime
+Configure em **Settings > Environment variables** no projeto Pages:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://seu-projeto.supabase.co
@@ -57,13 +50,19 @@ set raw_app_meta_data =
 where email = 'seu-email@dominio.com';
 ```
 
-## Cloudflare
+## Configuração do Cloudflare Pages
 
-O arquivo `wrangler.jsonc` já aponta para:
+Use exatamente:
 
-- Worker: `engelab`
-- output do OpenNext: `.open-next/worker.js`
-- assets: `.open-next/assets`
-- `nodejs_compat`
+```txt
+Build command:
+npx @cloudflare/next-on-pages@1
 
-Se quiser trocar o nome do app, altere `name` em `wrangler.jsonc`.
+Build output directory:
+.vercel/output/static
+
+Root directory:
+vazio
+```
+
+O arquivo `wrangler.toml` já contém `pages_build_output_dir = ".vercel/output/static"`.
