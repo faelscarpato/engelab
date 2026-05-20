@@ -1,0 +1,68 @@
+
+> engelab-next@0.1.0 dev
+> next dev -p 3000
+
+  ▲ Next.js 14.2.1
+  - Local:        http://localhost:3000
+
+ ✓ Starting...
+ ✓ Ready in 5.8s
+ ○ Compiling / ...
+ ✓ Compiled / in 23s (508 modules)
+ GET / 200 in 94ms
+ GET / 200 in 226ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 1098ms (500 modules)
+ ○ Compiling /app ...
+ ✓ Compiled /app in 701ms (506 modules)
+ ○ Compiling /app/comecar ...
+ ✓ Compiled /app/comecar in 1222ms (514 modules)
+ ○ Compiling /app/trilhas ...
+ ✓ Compiled /app/trilhas in 780ms (522 modules)
+ ○ Compiling /app/responsabilidade ...
+ ✓ Compiled /app/responsabilidade in 1022ms (526 modules)
+ ○ Compiling /app/biblioteca ...
+ ✓ Compiled /app/biblioteca in 2.1s (544 modules)
+ ○ Compiling /app/downloads ...
+ ✓ Compiled /app/downloads in 1310ms (552 modules)
+ ○ Compiling /app/prompts ...
+ ✓ Compiled /app/prompts in 915ms (564 modules)
+ ○ Compiling /app/agentes ...
+ ✓ Compiled /app/agentes in 1025ms (569 modules)
+ ○ Compiling /app/checklists ...
+ ✓ Compiled /app/checklists in 885ms (571 modules)
+ ○ Compiling /app/progresso ...
+ ✓ Compiled /app/progresso in 1406ms (577 modules)
+ ○ Compiling /app/modulos-plus ...
+ ✓ Compiled /app/modulos-plus in 1160ms (585 modules)
+ ✓ Compiled /app in 348ms (295 modules)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 2.2s (558 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 2674ms
+ ✓ Compiled in 2s (569 modules)
+ ✓ Compiled in 1141ms (569 modules)
+ ✓ Compiled in 1422ms (569 modules)
+ ✓ Compiled in 1591ms (569 modules)
+ ✓ Compiled in 1780ms (569 modules)
+ ✓ Compiled in 991ms (569 modules)
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 3.8s (779 modules)
+ ✓ Compiled in 355ms (312 modules)
+ GET /app 500 in 63ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 1362ms (782 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 1826ms
+ ✓ Compiled in 1215ms (779 modules)
+ ✓ Compiled in 1281ms (481 modules)
+ ✓ Compiled in 745ms (481 modules)
+ ✓ Compiled in 6.7s (910 modules)
+ ✓ Compiled in 4.1s (894 modules)
+   Reload env: .env
+ ✓ Compiled in 15.6s (908 modules)
+ ✓ Compiled in 3.5s (894 modules)
+ ✓ Compiled in 1108ms (539 modules)
+ ✓ Compiled in 2.7s (908 modules)
+ ✓ Compiled in 2.5s (908 modules)
+ ✓ Compiled in 1116ms (908 modules)
+ ✓ Compiled in 492ms (539 modules)
+[?25h
