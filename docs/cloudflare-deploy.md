@@ -11,6 +11,13 @@ npm run build:cf
 npm run preview:cf
 ```
 
+No Windows, se o Wrangler tentar gravar logs fora da pasta do projeto e falhar,
+rode antes:
+
+```powershell
+$env:XDG_CONFIG_HOME = (Join-Path (Get-Location).Path '.wrangler-config')
+```
+
 ## Deploy
 
 ```bash
@@ -54,7 +61,7 @@ where email = 'seu-email@dominio.com';
 
 O arquivo `wrangler.jsonc` já aponta para:
 
-- Worker: `engelab-next`
+- Worker: `engelab`
 - output do OpenNext: `.open-next/worker.js`
 - assets: `.open-next/assets`
 - `nodejs_compat`
