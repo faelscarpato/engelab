@@ -19,16 +19,16 @@ const chatGptUrl = 'https://chatgpt.com/';
 
 export const agents: Agent[] = [
   {
-    id: 'capylanding',
-    name: 'CapyLanding GPT',
-    category: 'WebSite',
-    whenToUse: 'Ao estruturar páginas de captura, ofertas e argumentos de venda.',
-    delivers: 'Estrutura de landing page, copy e blocos de conversão.',
+    id: 'memorial',
+    name: 'Agente Memorial GPT',
+    category: 'DOC, Escrita',
+    whenToUse: 'Elabora memoriais descritivos conceituais claros, técnicos e estruturados.',
+    delivers: 'Para projetos de engenharia, arquitetura, segurança, instalações, acessibilidade, orçamento ou execuçãoo.',
     recommendedLevel: 'Todos',
-    initialPrompt: 'Crie uma landing page para uma oferta de engenharia com foco em conversão.',
-    agentUrl: 'https://chatgpt.com/g/g-6a0ca2d5d4648191af29e54add8b7581-capylanding-gpt',
+    initialPrompt: 'Organize este texto como memorial.',
+    agentUrl: 'https://chatgpt.com/g/g-6a0eacf804ec819194bc479c0a650ce1-agente-memorial-gpt',
     status: 'active',
-    icon: 'LP',
+    icon: 'AMG',
   },
   {
     id: 'capyux',
