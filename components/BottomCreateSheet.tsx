@@ -9,7 +9,7 @@ const items = [
   { label: 'Início', href: '/app', icon: '⌂' },
   { label: 'Projetos', href: '/app/biblioteca', icon: '▦' },
   { label: 'Prompts', href: '/app/prompts', icon: '✦' },
-  { label: 'Perfil', href: '/app/progresso', icon: '◌' },
+  { label: 'Perfil', href: '/app/perfil', icon: '◉' },
 ];
 
 const createActions = [

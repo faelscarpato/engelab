@@ -24,6 +24,9 @@ export default function Header() {
       </div>
 
       <nav className="ml-auto flex items-center gap-2 text-sm">
+        <Link href="/app/perfil" className="btn-ghost hidden sm:inline-flex">
+          Perfil
+        </Link>
         <Link href="/app/responsabilidade" className="btn-ghost hidden sm:inline-flex">
           Uso responsável
         </Link>

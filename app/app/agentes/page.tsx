@@ -37,7 +37,7 @@ export default function AgentesPage() {
           <AgentCard
             key={agent.id}
             agent={agent}
-            onOpen={setActiveAgentId}
+            onDetails={setActiveAgentId}
           />
         ))}
       </div>
@@ -89,14 +89,25 @@ export default function AgentesPage() {
               <button
                 type="button"
                 onClick={() => {
+                  window.open(activeAgent.agentUrl, '_blank', 'noopener,noreferrer');
+                }}
+                className="btn-primary w-full"
+                disabled={activeAgent.status !== 'active'}
+              >
+                {activeAgent.status === 'active' ? 'Abrir agente' : 'Agente em breve'}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
                   if (typeof navigator !== 'undefined') {
                     navigator.clipboard.writeText(activeAgent.initialPrompt);
                     showToast('Prompt do agente copiado');
                   }
                 }}
-                className="btn-primary w-full"
+                className="btn-secondary w-full"
               >
-                Copiar prompt
+                Copiar prompt inicial
               </button>
             </div>
         </AccessibleDialog>

@@ -1,31 +1,37 @@
 /*
- * Página de Projetos Modelo. Busca, filtros rápidos por disciplina,
- * cards mais escaneáveis e ações explícitas.
+ * Biblioteca 50 Projetos conectada ao catálogo real do repositório engelab_doc.
  */
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { Project, projects } from '../../../data/projects';
+import DocModal from '../../../components/DocModal';
 import FilterBar from '../../../components/features/projects/FilterBar';
 import ProjectCard from '../../../components/features/projects/ProjectCard';
 import ProjectListItem from '../../../components/features/projects/ProjectListItem';
 import EmptyState from '../../../components/ui/EmptyState';
+import { engelabProjects } from '../../../lib/data/engelab-projects';
+import type { EngelabProject, FileType } from '../../../lib/types/library';
+
+function previewType(project: EngelabProject): FileType {
+  return project.previewPdf ? 'pdf' : project.previewImage?.endsWith('.webp') ? 'webp' : 'png';
+}
 
 export default function BibliotecaPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [disciplineFilter, setDisciplineFilter] = useState('Todos');
   const [levelFilter, setLevelFilter] = useState('Todos');
-  const [timeFilter, setTimeFilter] = useState('Todos');
+  const [categoryFilter, setCategoryFilter] = useState('Todos');
   const [sortBy, setSortBy] = useState('number');
   const [viewMode, setViewMode] = useState<'cards' | 'list'>('list');
   const [visibleCount, setVisibleCount] = useState(16);
-  const [favorites, setFavorites] = useState<number[]>([]);
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [previewProject, setPreviewProject] = useState<EngelabProject | null>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem('favoriteProjects');
       if (stored) {
-        setFavorites(JSON.parse(stored));
+        setFavorites((JSON.parse(stored) as Array<string | number>).map(String));
       }
     }
   }, []);
@@ -37,57 +43,63 @@ export default function BibliotecaPage() {
   }, [favorites]);
 
   const levels = useMemo(
-    () => ['Todos', ...Array.from(new Set(projects.map((project) => project.level)))],
+    () => ['Todos', ...Array.from(new Set(engelabProjects.map((project) => project.level)))],
+    []
+  );
+
+  const categories = useMemo(
+    () => ['Todos', ...Array.from(new Set(engelabProjects.map((project) => project.category)))],
     []
   );
 
   const disciplines = useMemo(() => {
-    const base = Array.from(new Set(projects.map((project) => project.discipline)));
+    const base = Array.from(new Set(engelabProjects.map((project) => project.discipline)));
 
     return [
-      { label: 'Todos', value: 'Todos', count: projects.length },
+      { label: 'Todos', value: 'Todos', count: engelabProjects.length },
       ...base.map((discipline) => ({
         label: discipline,
         value: discipline,
-        count: projects.filter((project) => project.discipline === discipline).length,
+        count: engelabProjects.filter((project) => project.discipline === discipline).length,
       })),
     ];
   }, []);
 
-  const handleFavorite = (id: number) => {
+  const handleFavorite = (id: string) => {
     setFavorites((prev) =>
       prev.includes(id) ? prev.filter((favorite) => favorite !== id) : [...prev, id]
     );
   };
 
   const filtered = useMemo(() => {
-    const result = projects.filter((project) => {
+    const result = engelabProjects.filter((project) => {
       const query = searchTerm.toLowerCase();
       const matchesSearch =
+        project.code.toLowerCase().includes(query) ||
         project.title.toLowerCase().includes(query) ||
-        project.description.toLowerCase().includes(query) ||
-        project.discipline.toLowerCase().includes(query);
+        project.category.toLowerCase().includes(query) ||
+        project.discipline.toLowerCase().includes(query) ||
+        project.sourceFolder.toLowerCase().includes(query);
 
       const matchesDiscipline =
         disciplineFilter === 'Todos' || project.discipline === disciplineFilter;
 
       const matchesLevel = levelFilter === 'Todos' || project.level === levelFilter;
-      const matchesTime =
-        timeFilter === 'Todos' || project.estimatedMinutes <= Number(timeFilter);
+      const matchesCategory = categoryFilter === 'Todos' || project.category === categoryFilter;
 
-      return matchesSearch && matchesDiscipline && matchesLevel && matchesTime;
+      return matchesSearch && matchesDiscipline && matchesLevel && matchesCategory;
     });
 
     return [...result].sort((a, b) => {
-      if (sortBy === 'time') return a.estimatedMinutes - b.estimatedMinutes;
       if (sortBy === 'title') return a.title.localeCompare(b.title);
       if (sortBy === 'level') return a.level.localeCompare(b.level);
-      return a.projectNumber - b.projectNumber;
+      if (sortBy === 'category') return a.category.localeCompare(b.category);
+      return a.number - b.number;
     });
-  }, [disciplineFilter, levelFilter, searchTerm, sortBy, timeFilter]);
+  }, [categoryFilter, disciplineFilter, levelFilter, searchTerm, sortBy]);
 
   const visibleProjects = filtered.slice(0, visibleCount);
-  const groupedProjects = visibleProjects.reduce<Record<string, Project[]>>((groups, project) => {
+  const groupedProjects = visibleProjects.reduce<Record<string, EngelabProject[]>>((groups, project) => {
     groups[project.discipline] = groups[project.discipline] ?? [];
     groups[project.discipline].push(project);
     return groups;
@@ -97,7 +109,7 @@ export default function BibliotecaPage() {
     setSearchTerm('');
     setDisciplineFilter('Todos');
     setLevelFilter('Todos');
-    setTimeFilter('Todos');
+    setCategoryFilter('Todos');
     setSortBy('number');
     setVisibleCount(16);
   };
@@ -108,8 +120,8 @@ export default function BibliotecaPage() {
         <p className="page-kicker">Projetos Modelo</p>
         <h1 className="app-title">Biblioteca 50 Projetos</h1>
         <p className="page-copy">
-          Encontre modelos conceituais com busca, filtros rápidos e ações diretas
-          para abrir ou salvar.
+          Explore os 50 projetos reais do repositório ENGELAB com pranchas,
+          memoriais, checklists, prompts e avisos técnicos.
         </p>
       </div>
 
@@ -117,13 +129,13 @@ export default function BibliotecaPage() {
         searchTerm={searchTerm}
         disciplineFilter={disciplineFilter}
         levelFilter={levelFilter}
-        timeFilter={timeFilter}
+        categoryFilter={categoryFilter}
         sortBy={sortBy}
-        viewMode={viewMode}
         disciplines={disciplines}
         levels={levels}
+        categories={categories}
         resultCount={filtered.length}
-        totalCount={projects.length}
+        totalCount={engelabProjects.length}
         onSearchTermChange={(value) => {
           setSearchTerm(value);
           setVisibleCount(16);
@@ -136,14 +148,37 @@ export default function BibliotecaPage() {
           setLevelFilter(value);
           setVisibleCount(16);
         }}
-        onTimeFilterChange={(value) => {
-          setTimeFilter(value);
+        onCategoryFilterChange={(value) => {
+          setCategoryFilter(value);
           setVisibleCount(16);
         }}
         onSortByChange={setSortBy}
-        onViewModeChange={setViewMode}
         onClear={clearFilters}
       />
+
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="meta-row">
+          <span>{visibleProjects.length} exibidos</span>
+          <span className="meta-dot" />
+          <span>{filtered.length} encontrados</span>
+        </div>
+        <div className="view-toggle" aria-label="Modo de visualização">
+          <button
+            type="button"
+            aria-pressed={viewMode === 'cards'}
+            onClick={() => setViewMode('cards')}
+          >
+            Cards
+          </button>
+          <button
+            type="button"
+            aria-pressed={viewMode === 'list'}
+            onClick={() => setViewMode('list')}
+          >
+            Lista
+          </button>
+        </div>
+      </div>
 
       {filtered.length === 0 ? (
         <EmptyState
@@ -163,6 +198,7 @@ export default function BibliotecaPage() {
               project={project}
               saved={favorites.includes(project.id)}
               onFavorite={handleFavorite}
+              onPreview={setPreviewProject}
             />
           ))}
         </div>
@@ -181,6 +217,7 @@ export default function BibliotecaPage() {
                     project={project}
                     saved={favorites.includes(project.id)}
                     onFavorite={handleFavorite}
+                    onPreview={setPreviewProject}
                   />
                 ))}
               </div>
@@ -200,6 +237,14 @@ export default function BibliotecaPage() {
           </button>
         </div>
       )}
+
+      <DocModal
+        isOpen={Boolean(previewProject)}
+        onClose={() => setPreviewProject(null)}
+        title={previewProject ? `${previewProject.code} · ${previewProject.title}` : 'Prévia'}
+        fileUrl={previewProject?.previewPdf ?? previewProject?.previewImage ?? null}
+        fileType={previewProject ? previewType(previewProject) : 'pdf'}
+      />
     </div>
   );
 }

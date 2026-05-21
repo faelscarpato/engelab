@@ -7,45 +7,20 @@
 import { useEffect, useMemo, useState } from 'react';
 import { prompts } from '../../../data/prompts';
 import { disciplineBadgeClass } from '../../../lib/design';
-import PromptQualityScore from '../../../components/features/prompts/PromptQualityScore';
+import PromptBuilder, {
+  type BuilderFields,
+  type SavedPrompt,
+} from '../../../components/features/prompts/PromptBuilder';
 import EmptyState from '../../../components/ui/EmptyState';
 import Toast from '../../../components/ui/Toast';
 
-interface SavedPrompt {
-  id: number;
-  title: string;
-  content: string;
-  notes?: string;
-}
-
 const filters = ['Todos', 'Geral', 'Estrutural', 'Elétrica', 'Hidrossanitário', 'Documentação', 'Revisão'];
-
-const fieldLabels = {
-  objetivo: 'Objetivo',
-  contexto: 'Contexto',
-  tipoProjeto: 'Tipo de projeto',
-  disciplina: 'Disciplina',
-  nivelDetalhe: 'Nível de detalhe',
-  formatoSaida: 'Formato de saída',
-  restricoes: 'Restrições',
-};
-
-type BuilderFields = Record<keyof typeof fieldLabels, string>;
-
-const emptyFields: BuilderFields = {
-  objetivo: '',
-  contexto: '',
-  tipoProjeto: '',
-  disciplina: '',
-  nivelDetalhe: '',
-  formatoSaida: '',
-  restricoes: '',
-};
 
 export default function PromptsPage() {
   const [savedPrompts, setSavedPrompts] = useState<SavedPrompt[]>([]);
   const [activeFilter, setActiveFilter] = useState('Todos');
-  const [builderFields, setBuilderFields] = useState<BuilderFields>(emptyFields);
+  const [builderFields, setBuilderFields] = useState<Partial<BuilderFields>>({});
+  const [builderVersion, setBuilderVersion] = useState(0);
   const [toast, setToast] = useState('');
 
   useEffect(() => {
@@ -57,13 +32,6 @@ export default function PromptsPage() {
     }
   }, []);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('myPrompts', JSON.stringify(savedPrompts));
-      localStorage.setItem('promptsSaved', savedPrompts.length.toString());
-    }
-  }, [savedPrompts]);
-
   const filteredPrompts = useMemo(
     () =>
       prompts.filter((prompt) => {
@@ -71,28 +39,6 @@ export default function PromptsPage() {
       }),
     [activeFilter]
   );
-
-  const preview = useMemo(() => {
-    const parts = [
-      builderFields.objetivo && `Objetivo: ${builderFields.objetivo}.`,
-      builderFields.contexto && `Contexto: ${builderFields.contexto}.`,
-      builderFields.tipoProjeto && `Tipo de projeto: ${builderFields.tipoProjeto}.`,
-      builderFields.disciplina && `Disciplina: ${builderFields.disciplina}.`,
-      builderFields.nivelDetalhe && `Nível de detalhe: ${builderFields.nivelDetalhe}.`,
-      builderFields.formatoSaida && `Formato de saída: ${builderFields.formatoSaida}.`,
-      builderFields.restricoes && `Restrições técnicas: ${builderFields.restricoes}.`,
-      'Limite: este estudo é conceitual e não substitui cálculo técnico, projeto executivo ou revisão de profissional habilitado.',
-    ].filter(Boolean);
-
-    return parts.join('\n\n');
-  }, [builderFields]);
-
-  const qualityChecks = {
-    contexto: Boolean(builderFields.contexto || builderFields.tipoProjeto || builderFields.disciplina),
-    objetivo: Boolean(builderFields.objetivo),
-    formato: Boolean(builderFields.formatoSaida || builderFields.nivelDetalhe),
-    restricoes: Boolean(builderFields.restricoes),
-  };
 
   const showToast = (message: string) => {
     setToast(message);
@@ -108,30 +54,19 @@ export default function PromptsPage() {
     }
   };
 
-  const handleSave = (content: string, title: string) => {
-    if (!content.trim()) return;
-
-    setSavedPrompts((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        title: title || 'Prompt personalizado',
-        content,
-      },
-    ]);
-    showToast('Prompt salvo');
-  };
-
   const applyTemplate = (prompt: (typeof prompts)[number]) => {
+    const normalizedDiscipline = prompt.discipline === 'Elétrica' ? 'Elétrico' : prompt.discipline;
+
     setBuilderFields({
       objetivo: prompt.title,
       contexto: prompt.content,
       tipoProjeto: prompt.relatedProjectId ? `Projeto modelo ${prompt.relatedProjectId}` : '',
-      disciplina: prompt.discipline,
+      disciplina: normalizedDiscipline,
       nivelDetalhe: prompt.level,
       formatoSaida: prompt.promptType,
       restricoes: 'Manter caráter conceitual, indicar pontos de validação e evitar conclusões executivas.',
     });
+    setBuilderVersion((current) => current + 1);
     showToast('Template aplicado ao builder');
   };
 
@@ -146,7 +81,7 @@ export default function PromptsPage() {
         </p>
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-[280px_minmax(0,1fr)_330px] xl:items-start">
+      <div className="grid gap-5 xl:grid-cols-[300px_minmax(0,1fr)] xl:items-start">
         <aside className="space-y-4 xl:sticky xl:top-24">
           <section className="surface-section p-4">
             <h2 className="section-title">Templates</h2>
@@ -223,97 +158,12 @@ export default function PromptsPage() {
           </section>
         </aside>
 
-        <section id="prompt-builder" className="surface-card p-5">
-          <div className="mb-5">
-            <p className="page-kicker">Builder guiado</p>
-            <h2 className="section-title mt-1">Monte o pedido central</h2>
-            <p className="section-copy mt-2">
-              O preview atualiza ao vivo. Os campos de contexto, objetivo,
-              formato e restrições alimentam o score da lateral.
-            </p>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            {(Object.keys(fieldLabels) as Array<keyof BuilderFields>).map((field) => {
-              const isLong = field === 'contexto' || field === 'restricoes';
-
-              return (
-                <div key={field} className={isLong ? 'md:col-span-2' : ''}>
-                  <label
-                    htmlFor={`field-${field}`}
-                    className="mb-2 block text-sm font-bold text-[var(--text-primary)]"
-                  >
-                    {fieldLabels[field]}
-                  </label>
-                  {isLong ? (
-                    <textarea
-                      id={`field-${field}`}
-                      value={builderFields[field]}
-                      onChange={(event) =>
-                        setBuilderFields({
-                          ...builderFields,
-                          [field]: event.target.value,
-                        })
-                      }
-                      className="textarea-field"
-                      placeholder={`Informe ${fieldLabels[field].toLowerCase()}`}
-                    />
-                  ) : (
-                    <input
-                      id={`field-${field}`}
-                      type="text"
-                      value={builderFields[field]}
-                      onChange={(event) =>
-                        setBuilderFields({
-                          ...builderFields,
-                          [field]: event.target.value,
-                        })
-                      }
-                      className="input-field"
-                      placeholder={`Informe ${fieldLabels[field].toLowerCase()}`}
-                    />
-                  )}
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="mt-5 flex flex-wrap gap-2">
-            <button type="button" onClick={() => handleCopy(preview)} className="btn-primary">
-              Copiar prompt
-            </button>
-            <button
-              type="button"
-              onClick={() => handleSave(preview, builderFields.objetivo)}
-              className="btn-secondary"
-            >
-              Salvar prompt
-            </button>
-            <button
-              type="button"
-              onClick={() => setBuilderFields(emptyFields)}
-              className="btn-ghost"
-            >
-              Limpar
-            </button>
-          </div>
-        </section>
-
-        <aside className="space-y-4 xl:sticky xl:top-24">
-          <PromptQualityScore checks={qualityChecks} />
-
-          <section className="surface-section p-4">
-            <div className="mb-3 flex items-center justify-between gap-3">
-              <h2 className="section-title">Preview</h2>
-              <span className="badge">{preview.length} caracteres</span>
-            </div>
-            <div className="surface-card-soft min-h-[260px] p-4">
-              <p className="whitespace-pre-line text-sm leading-6 text-[var(--text-secondary)]">
-                {preview}
-              </p>
-            </div>
-          </section>
-        </aside>
+        <PromptBuilder
+          key={builderVersion}
+          initialFields={builderFields}
+          onSavePrompt={(prompt) => setSavedPrompts((prev) => [...prev, prompt])}
+          onToast={showToast}
+        />
       </div>
 
       <Toast message={toast} />

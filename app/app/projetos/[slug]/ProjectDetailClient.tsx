@@ -75,7 +75,7 @@ export default function ProjectDetailClient({ slug }: { slug: string }) {
           </div>
 
           <Link href="/app/biblioteca" className="btn-secondary">
-            ← Biblioteca
+            Voltar para a Biblioteca
           </Link>
         </div>
       </section>

@@ -3,6 +3,7 @@
  */
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 interface Stats {
@@ -26,6 +27,7 @@ export default function ProgressoPage() {
     promptsSaved: 0,
     checklistsCompleted: 0,
   });
+  const [profileName, setProfileName] = useState('');
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -35,6 +37,13 @@ export default function ProgressoPage() {
         promptsSaved: parseInt(localStorage.getItem('promptsSaved') || '0', 10),
         checklistsCompleted: parseInt(localStorage.getItem('checklistsCompleted') || '0', 10),
       });
+
+      try {
+        const profile = JSON.parse(localStorage.getItem('studentProfile') || 'null') as { fullName?: string } | null;
+        setProfileName(profile?.fullName ?? '');
+      } catch {
+        setProfileName('');
+      }
     }
   }, []);
 
@@ -58,7 +67,7 @@ export default function ProgressoPage() {
             <p className="page-kicker">Perfil</p>
             <h1 className="app-title">Minha evolução</h1>
             <p className="page-copy">
-              Acompanhe atividades concluídas e marcos de uso da plataforma.
+              {profileName ? `${profileName}, acompanhe suas atividades concluídas.` : 'Acompanhe atividades concluídas e marcos de uso da plataforma.'}
             </p>
           </div>
           <div className="surface-card-soft min-w-[180px] p-4 text-center">
@@ -97,6 +106,21 @@ export default function ProgressoPage() {
               {badge.achieved ? '✓' : '○'} {badge.title}
             </span>
           ))}
+        </div>
+      </section>
+
+      <section className="surface-card p-5">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 className="section-title">Certificados</h2>
+            <p className="section-copy mt-1">
+              A emissão em PDF depende dos critérios de conclusão e dos dados
+              preenchidos no Perfil do Aluno.
+            </p>
+          </div>
+          <Link href="/app/perfil" className="btn-secondary">
+            Completar perfil
+          </Link>
         </div>
       </section>
     </div>

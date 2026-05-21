@@ -4,11 +4,71 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import DocModal from '../../../components/DocModal';
 import { lessons } from '../../../data/lessons';
+import type { FileType } from '../../../lib/types/library';
 
 interface LessonStatus {
   [id: number]: 'not-started' | 'in-progress' | 'completed';
 }
+
+interface LessonDocument {
+  lessonId: number;
+  title: string;
+  fileUrl: string;
+  fileType: FileType;
+}
+
+const RAW_BASE = 'https://raw.githubusercontent.com/faelscarpato/engelab_doc/main';
+
+function rawUrl(path: string) {
+  return `${RAW_BASE}/${path.split('/').map(encodeURIComponent).join('/')}`;
+}
+
+const lessonDocuments: LessonDocument[] = [
+  {
+    lessonId: 1,
+    title: 'Apostila Dominando a Biblioteca de 50 Projetos-Modelo',
+    fileUrl: rawUrl('00_0_Manual Operacional/Apostila Dominando a Biblioteca de 50 projetos-modelo.pdf'),
+    fileType: 'pdf',
+  },
+  {
+    lessonId: 2,
+    title: 'Como usar a Biblioteca',
+    fileUrl: rawUrl('00_GUIA_DE_USO/01_Como_Usar_A_Biblioteca.pdf'),
+    fileType: 'pdf',
+  },
+  {
+    lessonId: 3,
+    title: 'Índice da Biblioteca',
+    fileUrl: rawUrl('00_GUIA_DE_USO/03_Indice_Da_Biblioteca.pdf'),
+    fileType: 'pdf',
+  },
+  {
+    lessonId: 4,
+    title: 'Catálogo de Prompts Modulares',
+    fileUrl: rawUrl('04_PROMPTS_MODULARES/Catalogo_De_Prompts_Modulares.pdf'),
+    fileType: 'pdf',
+  },
+  {
+    lessonId: 5,
+    title: 'Prompt Base Geral',
+    fileUrl: rawUrl('04_PROMPTS_MODULARES/Prompt_Base_Geral.txt'),
+    fileType: 'txt',
+  },
+  {
+    lessonId: 6,
+    title: 'Checklist de Estudo Geral',
+    fileUrl: rawUrl('00_GUIA_DE_USO/04_Checklist_De_Estudo_Geral.pdf'),
+    fileType: 'pdf',
+  },
+  {
+    lessonId: 7,
+    title: 'Manual Oficial Biblioteca 50 Projetos',
+    fileUrl: rawUrl('00_0_Manual Operacional/Manual_Oficial_Biblioteca_50_Projetos_Modelo_V02_Limpo.pdf'),
+    fileType: 'pdf',
+  },
+];
 
 function statusLabel(status: LessonStatus[number]) {
   if (status === 'completed') return 'Concluída';
@@ -24,6 +84,7 @@ function statusClass(status: LessonStatus[number]) {
 
 export default function ComecarPage() {
   const [statusMap, setStatusMap] = useState<LessonStatus>({});
+  const [activeDocument, setActiveDocument] = useState<LessonDocument | null>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -44,18 +105,26 @@ export default function ComecarPage() {
     }
   }, [statusMap]);
 
-  const handleToggle = (id: number) => {
+  const markCompleted = (id: number) => {
     setStatusMap((prev) => {
-      const current = prev[id] || 'not-started';
-      const next =
-        current === 'not-started'
-          ? 'in-progress'
-          : current === 'in-progress'
-          ? 'completed'
-          : 'completed';
-
-      return { ...prev, [id]: next };
+      return { ...prev, [id]: 'completed' };
     });
+  };
+
+  const openLesson = (id: number) => {
+    const document = lessonDocuments.find((item) => item.lessonId === id);
+
+    setStatusMap((prev) => {
+      if (prev[id] === 'completed') return prev;
+      return { ...prev, [id]: 'in-progress' };
+    });
+
+    if (document) setActiveDocument(document);
+  };
+
+  const closeDocument = () => {
+    if (activeDocument) markCompleted(activeDocument.lessonId);
+    setActiveDocument(null);
   };
 
   const introLessons = lessons
@@ -131,14 +200,14 @@ export default function ComecarPage() {
 
                   <button
                     type="button"
-                    onClick={() => handleToggle(lesson.id)}
+                    onClick={() => openLesson(lesson.id)}
                     className={isCurrent ? 'btn-primary shrink-0' : 'btn-secondary shrink-0'}
                   >
                     {status === 'completed'
                       ? 'Rever'
                       : status === 'in-progress'
-                      ? 'Concluir'
-                      : 'Iniciar'}
+                      ? 'Continuar'
+                      : 'Começar'}
                   </button>
                 </div>
               </div>
@@ -166,6 +235,14 @@ export default function ComecarPage() {
           </article>
         ))}
       </div>
+
+      <DocModal
+        isOpen={Boolean(activeDocument)}
+        onClose={closeDocument}
+        title={activeDocument?.title ?? 'Aula'}
+        fileUrl={activeDocument?.fileUrl ?? null}
+        fileType={activeDocument?.fileType ?? 'pdf'}
+      />
     </div>
   );
 }
