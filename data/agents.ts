@@ -25,7 +25,7 @@ export const agents: Agent[] = [
     delivers: 'Estrutura de landing page, copy e blocos de conversão.',
     recommendedLevel: 'Todos',
     initialPrompt: 'Crie uma landing page para uma oferta de engenharia com foco em conversão.',
-    agentUrl: chatGptUrl,
+    agentUrl: 'https://chatgpt.com/g/g-6a0ca2d5d4648191af29e54add8b7581-capylanding-gpt',
     status: 'active',
     icon: 'LP',
   },
