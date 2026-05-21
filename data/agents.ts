@@ -21,7 +21,7 @@ export const agents: Agent[] = [
   {
     id: 'capylanding',
     name: 'CapyLanding GPT',
-    category: 'Landing Pages e Conversão',
+    category: 'WebSite',
     whenToUse: 'Ao estruturar páginas de captura, ofertas e argumentos de venda.',
     delivers: 'Estrutura de landing page, copy e blocos de conversão.',
     recommendedLevel: 'Todos',
@@ -33,7 +33,7 @@ export const agents: Agent[] = [
   {
     id: 'capyux',
     name: 'CapyUX GPT',
-    category: 'UX, Produto e Experiência',
+    category: 'UX, Design',
     whenToUse: 'Ao desenhar fluxos, jornadas e telas de produto.',
     delivers: 'Diagnóstico de UX, arquitetura de informação e melhorias de interface.',
     recommendedLevel: 'Intermediário',
