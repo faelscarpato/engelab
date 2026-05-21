@@ -86,34 +86,37 @@ export default function AgentesPage() {
                 </p>
               </div>
 
-              <button
-                type="button"
-                onClick={() => {
-                  window.open(activeAgent.agentUrl, '_blank', 'noopener,noreferrer');
-                }}
-                className="btn-primary w-full"
-                disabled={activeAgent.status !== 'active'}
-              >
-                {activeAgent.status === 'active' ? 'Abrir agente' : 'Agente em breve'}
-              </button>
+               <button
+  type="button"
+  onClick={() => {
+    navigator.clipboard.writeText(activeAgent.initialPrompt);
+    window.open(activeAgent.agentUrl, '_blank', 'noopener,noreferrer');
+    showToast('Prompt do agente copiado e página aberta');
+  }}
+  className="btn-primary w-full"
+  disabled={activeAgent.status !== 'active'}
+>
+          {activeAgent.status === 'active' ? 'Abrir agente' : 'Agente em breve'}
+</button>
 
-              <button
-                type="button"
-                onClick={() => {
-                  if (typeof navigator !== 'undefined') {
-                    navigator.clipboard.writeText(activeAgent.initialPrompt);
-                    showToast('Prompt do agente copiado');
-                  }
-                }}
-                className="btn-secondary w-full"
-              >
-                Copiar prompt inicial
-              </button>
-            </div>
+        < button
+    type = "button"
+    onClick = {() => {
+        if (typeof navigator !== 'undefined') {
+            navigator.clipboard.writeText(activeAgent.initialPrompt);
+            showToast('Prompt do agente copiado');
+        }
+    }
+}
+className = "btn-secondary w-full"
+    >
+    Copiar prompt inicial
+        </button>
+        </div>
         </AccessibleDialog>
       )}
 
-      <Toast message={toast} />
+<Toast message={ toast } />
     </div>
   );
 }

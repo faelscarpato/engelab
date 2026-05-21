@@ -9,6 +9,7 @@ interface AgentCardProps {
 
 export default function AgentCard({ agent, onDetails }: AgentCardProps) {
   const active = agent.status === 'active';
+  const coverImage = agent.coverImage ?? `/agents/engelab.webp`;
 
   const openAgent = () => {
     if (!active) return;
@@ -18,6 +19,15 @@ export default function AgentCard({ agent, onDetails }: AgentCardProps) {
   return (
     <article className="agent-card">
       <div className="agent-card-visual">
+        <img
+          src={coverImage}
+          alt=""
+          aria-hidden="true"
+          className="agent-card-cover"
+          onError={(event) => {
+            event.currentTarget.style.display = 'none';
+          }}
+        />
         <span className="agent-card-icon">{agent.icon}</span>
         <span className={`badge ${active ? 'badge-cyan' : 'badge-orange'}`}>
           {active ? 'Ativo' : 'Em breve'}

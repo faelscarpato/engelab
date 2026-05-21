@@ -7,8 +7,8 @@
   --bg-sidebar: #070d18;
   --bg-surface: #0b1220;
   --bg-surface-elevated: #101a2d;
-  --bg-card: #111c30;
-  --bg-card-soft: #0d1728;
+  --bg-card: #070c14;
+  --bg-card-soft: #32363d;
   --bg-hero: #102757;
 
   --brand-primary: #1167ff;
@@ -413,19 +413,19 @@ button {
   }
 
   .badge-cyan {
-    color: #b0ffff;
-    background: rgba(0, 200, 200, 0.12);
+    color: #000;
+    background: #56E609;
     border-color: rgba(0, 200, 200, 0.24);
   }
 
   .badge-orange {
-    color: #ffc49e;
-    background: rgba(255, 138, 61, 0.12);
+    color: #fff;
+    background: #A61943;
     border-color: rgba(255, 138, 61, 0.24);
   }
 
   .badge-purple {
-    color: #d8c7ff;
+    color: #000;
     background: rgba(139, 92, 246, 0.12);
     border-color: rgba(139, 92, 246, 0.24);
   }
@@ -781,7 +781,7 @@ button {
   }
 
   .agent-card {
-    min-height: 360px;
+    min-height: 260px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -792,30 +792,50 @@ button {
   }
 
   .agent-card-visual {
+    position: relative;
     min-height: 150px;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 16px;
     padding: 18px;
+    overflow: hidden;
     background:
-      linear-gradient(135deg, rgba(17, 103, 255, 0.26), rgba(0, 200, 200, 0.12)),
+      linear-gradient(135deg, rgba(17, 103, 255, 0.26), rgba(0, 200, 200, 0.0)),
       rgba(13, 23, 40, 0.98);
     border-bottom: 1px solid var(--border-default);
   }
 
+  .agent-card-cover {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+
+  }
+
   .agent-card-icon {
-    width: 78px;
-    height: 78px;
+    position: relative;
+    z-index: 1;
+    width: 38px;
+    height: 38px;
     display: grid;
     place-items: center;
-    border-radius: 18px;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 1);
+    background: rgba(0, 255, 179, 0.33);
     color: #fff;
-    font-size: 24px;
+    font-size: 14px;
     font-weight: 900;
     letter-spacing: 0;
+  }
+
+  .agent-card-visual .badge {
+    position: relative;
+    z-index: 1;
   }
 
   .doc-tree-row {
@@ -1008,7 +1028,7 @@ button {
     max-width: min(420px, calc(100vw - 32px));
     border: 1px solid rgba(34, 211, 238, 0.28);
     border-radius: var(--radius-md);
-    background: rgba(7, 13, 24, 0.96);
+    background: #fff;
     box-shadow: 0 18px 52px rgba(0, 0, 0, 0.42);
     color: var(--text-primary);
     padding: 12px 14px;
