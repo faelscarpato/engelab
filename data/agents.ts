@@ -242,7 +242,7 @@ export const agents: Agent[] = [
     recommendedLevel: 'Intermediário',
     initialPrompt: 'Monte uma estimativa conceitual de itens para este estudo.',
     agentUrl: 'https://chatgpt.com/g/g-6a0eb2d180c881919497a625daaeeab8-agente-orcamento-gpt',
-    status: 'planned',
+    status: 'active',
     icon: 'OR',
   },
   {
@@ -254,7 +254,7 @@ export const agents: Agent[] = [
     recommendedLevel: 'Avançado',
     initialPrompt: 'Liste normas e cuidados para validar este estudo conceitual.',
     agentUrl: 'https://chatgpt.com/g/g-6a0eb49004fc8191b741c93db7cfa7da-agente-normas-tecnicas-gpt',
-    status: 'planned',
+    status: 'active',
     icon: 'NT',
   },
   {
@@ -266,7 +266,7 @@ export const agents: Agent[] = [
     recommendedLevel: 'Intermediário',
     initialPrompt: 'Crie um roteiro de vistoria educacional para este contexto.',
     agentUrl: 'https://chatgpt.com/g/g-6a0eb656c9d88191a8302b905d9638b2-agente-vistoria-educacional-gpt',
-    status: 'planned',
+    status: 'active',
     icon: 'VT',
   },
   {
@@ -278,7 +278,7 @@ export const agents: Agent[] = [
     recommendedLevel: 'Avançado',
     initialPrompt: 'Liste pontos para revisar em um contrato educacional de plataforma.',
     agentUrl: 'https://chatgpt.com/g/g-6a0eb7600bec819195eefd51c3e6894b-agente-contratos-gpt',
-    status: 'planned',
+    status: 'active',
     icon: 'CT',
   },
   {
@@ -302,7 +302,7 @@ export const agents: Agent[] = [
     recommendedLevel: 'Todos',
     initialPrompt: 'Responda esta dúvida de aluno sobre a plataforma ENGELAB.',
     agentUrl: 'https://chatgpt.com/g/g-6a0eb84e024c8191914282f19eec52e5-agente-suporte-ao-aluno-gpt',
-    status: 'planned',
+    status: 'active',
     icon: 'SA',
   },
 ];
