@@ -11,6 +11,7 @@ export interface Agent {
   agentUrl: string;
   status: AgentStatus;
   icon: string;
+  coverImage?: string;
   relatedMaterials?: string[];
 }
 
