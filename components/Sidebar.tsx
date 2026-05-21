@@ -37,10 +37,6 @@ const navGroups: { label: string; items: NavItem[] }[] = [
     ],
   },
   {
-    label: 'Revisar',
-    items: [{ label: 'Checklists', href: '/app/checklists', icon: '✓' }],
-  },
-  {
     label: 'Conta',
     items: [
       { label: 'Perfil do Aluno', href: '/app/perfil', icon: '◉' },

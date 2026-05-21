@@ -152,6 +152,7 @@ button {
   }
 
   .page-shell {
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -211,6 +212,7 @@ button {
   }
 
   .surface-card {
+    min-width: 0;
     background:
       linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.012)),
       var(--bg-card);
@@ -220,12 +222,14 @@ button {
   }
 
   .surface-section {
+    min-width: 0;
     background: rgba(10, 18, 31, 0.88);
     border: 1px solid var(--border-default);
     border-radius: var(--radius-lg);
   }
 
   .surface-item {
+    min-width: 0;
     background: rgba(13, 23, 40, 0.82);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
@@ -877,10 +881,19 @@ button {
   }
 
   .doc-image-wrap {
-    min-height: 100%;
+    height: calc(100% - 58px);
+    min-height: 360px;
     display: grid;
     place-items: center;
     padding: 16px;
+    overflow: hidden;
+    touch-action: none;
+    user-select: none;
+    cursor: grab;
+  }
+
+  .doc-image-wrap:active {
+    cursor: grabbing;
   }
 
   .doc-image {
@@ -889,6 +902,59 @@ button {
     object-fit: contain;
     border-radius: 12px;
     border: 1px solid var(--border-default);
+    transform-origin: center center;
+    will-change: transform;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  .doc-image-toolbar {
+    min-height: 58px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border-default);
+    background: rgba(7, 13, 24, 0.94);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+
+  @media (max-width: 639px) {
+    .modal-backdrop {
+      padding: 8px;
+    }
+
+    .doc-modal-panel {
+      width: calc(100vw - 16px);
+      height: calc(100dvh - 16px);
+      border-radius: 14px;
+    }
+
+    .doc-modal-header {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .doc-frame {
+      min-height: calc(100dvh - 150px);
+    }
+
+    .doc-image-wrap {
+      height: calc(100dvh - 156px);
+      min-height: 320px;
+      padding: 8px;
+    }
+
+    .doc-image-toolbar {
+      justify-content: flex-start;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+    }
   }
 
   .doc-text {

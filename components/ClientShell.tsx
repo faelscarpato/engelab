@@ -6,6 +6,7 @@ import Header from './Header';
 import Sidebar from './Sidebar';
 import BottomCreateSheet from './BottomCreateSheet';
 import GlobalPromptBuilder from './GlobalPromptBuilder';
+import ContextualChecklist from './ContextualChecklist';
 
 export default function ClientShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -21,6 +22,7 @@ export default function ClientShell({ children }: { children: ReactNode }) {
       <div className="app-content">
         <Header />
         <main className="app-main">{children}</main>
+        <ContextualChecklist />
         <GlobalPromptBuilder />
         <BottomCreateSheet />
       </div>

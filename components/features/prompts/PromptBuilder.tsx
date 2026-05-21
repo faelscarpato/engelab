@@ -145,14 +145,15 @@ export default function PromptBuilder({
         projectType: fields.tipoProjeto,
       })
     );
+    window.dispatchEvent(new Event('gpt-dispatch'));
 
     window.open(agentRoute.url, '_blank', 'noopener,noreferrer');
     showToast(`Prompt copiado. Abrindo ${agentRoute.label}`);
   };
 
   return (
-    <div className={compact ? 'grid gap-4' : 'grid gap-5 xl:grid-cols-[minmax(0,1fr)_320px]'}>
-      <section id="prompt-builder" className={compact ? 'grid gap-4' : 'surface-card p-5'}>
+    <div className={compact ? 'grid min-w-0 gap-4' : 'grid min-w-0 gap-5 xl:grid-cols-[minmax(0,1fr)_320px]'}>
+      <section id="prompt-builder" className={compact ? 'grid min-w-0 gap-4' : 'surface-card min-w-0 p-5'}>
         <div className="mb-1">
           <p className="page-kicker">Builder guiado</p>
           <h2 className="section-title mt-1">Monte o pedido central</h2>
@@ -301,7 +302,7 @@ export default function PromptBuilder({
         </div>
       </section>
 
-      <aside className="space-y-4">
+      <aside className="min-w-0 space-y-4">
         {!compact && <PromptQualityScore checks={qualityChecks} />}
 
         <section className={compact ? 'surface-card-soft p-4' : 'surface-section p-4'}>

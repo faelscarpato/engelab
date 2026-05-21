@@ -81,9 +81,9 @@ export default function PromptsPage() {
         </p>
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-[300px_minmax(0,1fr)] xl:items-start">
-        <aside className="space-y-4 xl:sticky xl:top-24">
-          <section className="surface-section p-4">
+      <div className="grid min-w-0 gap-5 xl:grid-cols-[300px_minmax(0,1fr)] xl:items-start">
+        <aside className="min-w-0 space-y-4 xl:sticky xl:top-24">
+          <section className="surface-section min-w-0 overflow-hidden p-4">
             <h2 className="section-title">Templates</h2>
             <div className="mt-4 flex gap-2 overflow-x-auto pb-1 xl:flex-wrap">
               {filters.map((filter) => (
@@ -104,7 +104,7 @@ export default function PromptsPage() {
                   key={prompt.id}
                   type="button"
                   onClick={() => applyTemplate(prompt)}
-                  className="surface-item p-3 text-left focus-ring"
+                  className="surface-item min-w-0 p-3 text-left focus-ring"
                 >
                   <span className="mb-2 flex flex-wrap gap-2">
                     <span className={disciplineBadgeClass(prompt.discipline)}>
@@ -112,10 +112,10 @@ export default function PromptsPage() {
                     </span>
                     <span className="badge">{prompt.level}</span>
                   </span>
-                  <span className="block text-sm font-extrabold text-[var(--text-primary)]">
+                  <span className="block min-w-0 break-words text-sm font-extrabold text-[var(--text-primary)]">
                     {prompt.title}
                   </span>
-                  <span className="mt-1 line-clamp-2 block text-xs leading-5 text-[var(--text-secondary)]">
+                  <span className="mt-1 line-clamp-2 block min-w-0 break-words text-xs leading-5 text-[var(--text-secondary)]">
                     {prompt.howToUse}
                   </span>
                 </button>
@@ -123,7 +123,7 @@ export default function PromptsPage() {
             </div>
           </section>
 
-          <section className="surface-section p-4">
+          <section className="surface-section min-w-0 overflow-hidden p-4">
             <div className="mb-4 flex items-center justify-between gap-3">
               <h2 className="section-title">Prompts salvos</h2>
               <span className="badge badge-blue">{savedPrompts.length}</span>
