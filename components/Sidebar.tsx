@@ -20,30 +20,32 @@ const navGroups: { label: string; items: NavItem[] }[] = [
       { label: 'Início', href: '/app', icon: '⌂' },
       { label: 'Comece Aqui', href: '/app/comecar', icon: '▶' },
       { label: 'Trilhas', href: '/app/trilhas', icon: '◫' },
-      {
-        label: 'Projetos Modelo',
-        href: '/app/biblioteca',
-        icon: '▦',
-        match: ['/app/biblioteca', '/app/projetos'],
-      },
+      { label: 'Biblioteca Técnica', href: '/app/biblioteca', icon: '▦', match: ['/app/biblioteca', '/app/projetos'] },
       { label: 'Meus Materiais', href: '/app/materiais', icon: '◧' },
+      { label: 'Evolução', href: '/app/progresso', icon: '◌' },
+      { label: 'Certificados', href: '/app/perfil', icon: '◎' },
     ],
   },
   {
-    label: 'Criar',
+    label: 'Criar com IA',
     items: [
       { label: 'Prompts', href: '/app/prompts', icon: '✦' },
-      { label: 'Agentes IA', href: '/app/agentes', icon: '◎' },
+      { label: 'Agentes IA', href: '/app/agentes', icon: '✧' },
+      { label: 'Checklists', href: '/app/checklists', icon: '✓' },
     ],
   },
   {
-    label: 'Conta',
+    label: 'Suporte',
     items: [
-      { label: 'Perfil do Aluno', href: '/app/perfil', icon: '◉' },
-      { label: 'Minha evolução', href: '/app/progresso', icon: '◌' },
-      { label: 'Administração', href: '/app/admin', icon: '▣', adminOnly: true },
+      { label: 'Uso responsável', href: '/app/responsabilidade', icon: '!' },
       { label: 'Módulos Plus', href: '/app/modulos-plus', icon: '◆' },
-      { label: 'Responsabilidade', href: '/app/responsabilidade', icon: '!' },
+      { label: 'Downloads', href: '/app/downloads', icon: '⇩' },
+    ],
+  },
+  {
+    label: 'Administração',
+    items: [
+      { label: 'Usuários e financeiro', href: '/app/admin', icon: '▣', adminOnly: true },
     ],
   },
 ];
@@ -93,7 +95,7 @@ export default function Sidebar() {
 
   return (
     <aside className="sidebar" aria-label="Navegação principal">
-      <Link href="/app" className="sidebar-brand focus-ring">
+      <Link href="/app" className="sidebar-brand focus-ring" aria-label="Ir para o início">
         <span className="brand-mark">E</span>
         <span>
           <span className="block text-[17px] font-extrabold tracking-[0.18em] text-white">
@@ -106,41 +108,49 @@ export default function Sidebar() {
       </Link>
 
       <nav className="flex-1 overflow-y-auto p-4" aria-label="Seções da plataforma">
-        {navGroups.map((group) => (
-          <div key={group.label}>
-            <p className="sidebar-group-label">{group.label}</p>
-            <div className="space-y-1">
-              {group.items.map((item) => {
-                if (item.adminOnly && !isAdmin) return null;
+        {navGroups.map((group) => {
+          const visibleItems = group.items.filter((item) => !(item.adminOnly && !isAdmin));
+          if (visibleItems.length === 0) return null;
 
-                const active = matches(pathname, item);
+          return (
+            <div key={group.label}>
+              <p className="sidebar-group-label">{group.label}</p>
+              <div className="space-y-1">
+                {visibleItems.map((item) => {
+                  const active = matches(pathname, item);
 
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`sidebar-link ${active ? 'sidebar-link-active' : ''}`}
-                    aria-current={active ? 'page' : undefined}
-                  >
-                    <span className="w-5 text-center text-[15px]" aria-hidden="true">
-                      {item.icon}
-                    </span>
-                    <span>{item.label}</span>
-                  </Link>
-                );
-              })}
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={`sidebar-link ${active ? 'sidebar-link-active' : ''}`}
+                      aria-current={active ? 'page' : undefined}
+                    >
+                      <span className="w-5 text-center text-[15px]" aria-hidden="true">
+                        {item.icon}
+                      </span>
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </nav>
 
       <div className="p-4">
-        <div className="legal-note">
-          <span aria-hidden="true">⚠</span>
-          <span>
-            Conteúdo conceitual para estudo e referência. Não substitui profissional
-            habilitado.
-          </span>
+        <div className="surface-card-soft p-4">
+          <div className="mb-2 flex items-center gap-2">
+            <span className="badge badge-cyan">Ativo</span>
+            <span className="text-sm font-extrabold text-white">Plano Plus</span>
+          </div>
+          <p className="text-xs leading-5 text-[var(--text-secondary)]">
+            Ambiente de estudo guiado. Use IA como apoio e valide aplicações reais.
+          </p>
+          <Link href="/app/responsabilidade" className="mt-3 inline-flex text-xs font-bold text-[var(--brand-primary-hover)]">
+            Regras de uso →
+          </Link>
         </div>
       </div>
     </aside>
